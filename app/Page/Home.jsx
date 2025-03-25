@@ -108,86 +108,180 @@ export default function ColoredTextGenerator() {
     "BEYOND GODLIKE!!!!",
   ];
 
+  const containerStyle = {
+    background: "linear-gradient(135deg, #2C2F33 0%, #23272A 100%)",
+    minHeight: "100vh",
+    padding: "2rem",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
+  const cardStyle = {
+    background: "#36393F",
+    borderRadius: "12px",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+    padding: "2rem",
+    width: "100%",
+    maxWidth: "500px",
+    border: "1px solid #4F545C",
+  };
+
+  const titleStyle = {
+    color: "#FFFFFF",
+    borderBottom: "2px solid #4F545C",
+    paddingBottom: "0.5rem",
+    marginBottom: "1rem",
+    fontWeight: "bold",
+  };
+
+  const buttonBaseStyle = {
+    transition: "all 0.3s ease",
+    borderRadius: "6px",
+    padding: "0.5rem 1rem",
+    margin: "0.25rem",
+    cursor: "pointer",
+  };
+
+  const resetButtonStyle = {
+    ...buttonBaseStyle,
+    backgroundColor: "#4F545C",
+    color: "#FFFFFF",
+    ":hover": {
+      backgroundColor: "#5D6269",
+    },
+  };
+
+  const boldButtonStyle = {
+    ...buttonBaseStyle,
+    fontWeight: 700,
+    backgroundColor: "#7289DA",
+    color: "#FFFFFF",
+    ":hover": {
+      backgroundColor: "#5E7AD3",
+    },
+  };
+
+  const lineButtonStyle = {
+    ...buttonBaseStyle,
+    textDecoration: "underline",
+    backgroundColor: "#43B581",
+    color: "#FFFFFF",
+    ":hover": {
+      backgroundColor: "#3AA76D",
+    },
+  };
+
+  const paperStyle = {
+    minHeight: 200,
+    textAlign: "left",
+    fontFamily: "monospace",
+    backgroundColor: "#2F3136",
+    color: "#B9BBBE",
+    border: "1px solid #202225",
+    borderRadius: "8px",
+    whiteSpace: "pre-wrap",
+    padding: "1rem",
+    boxShadow: "inset 0 2px 4px rgba(0,0,0,0.1)",
+    outline: "none",
+  };
+
   return (
-    <Container size="sm" py="xl">
-      <Title order={2} mb="md">
-        Create your text
-      </Title>
+    <div style={containerStyle}>
+      <div style={cardStyle}>
+        <Title order={2} mb="md" style={titleStyle}>
+          Create your text
+        </Title>
 
-      <Group mb="md">
-        <Button onClick={() => applyStyle(0)}>Reset All</Button>
-        <Button onClick={() => applyStyle(1)} style={{ fontWeight: 700 }}>
-          Bold
-        </Button>
+        <Group mb="md">
+          <Button onClick={() => applyStyle(0)} style={resetButtonStyle}>
+            Reset All
+          </Button>
+          <Button onClick={() => applyStyle(1)} style={boldButtonStyle}>
+            Bold
+          </Button>
+          <Button onClick={() => applyStyle(4)} style={lineButtonStyle}>
+            Line
+          </Button>
+        </Group>
+
+        <Text fw={500} style={{ color: "#FFFFFF", marginBottom: "0.5rem" }}>
+          FG
+        </Text>
+        <Group mb="md">
+          {[30, 31, 32, 33, 34, 35, 36, 37].map((code) => (
+            <Tooltip label={ANSI_COLORS[code].name} key={`fg-${code}`}>
+              <Button
+                onClick={() => applyStyle(code)}
+                style={{
+                  ...buttonBaseStyle,
+                  backgroundColor: ANSI_COLORS[code].color,
+                  width: "40px",
+                  height: "40px",
+                  minWidth: 0,
+                  padding: 0,
+                }}
+              >
+                &nbsp;
+              </Button>
+            </Tooltip>
+          ))}
+        </Group>
+
+        <Text fw={500} style={{ color: "#FFFFFF", marginBottom: "0.5rem" }}>
+          BG
+        </Text>
+        <Group mb="md">
+          {[40, 41, 42, 43, 44, 45, 46, 47].map((code) => (
+            <Tooltip label={ANSI_COLORS[code].name} key={`bg-${code}`}>
+              <Button
+                onClick={() => applyStyle(code)}
+                style={{
+                  ...buttonBaseStyle,
+                  backgroundColor: ANSI_COLORS[code].bg,
+                  color: code >= 45 ? "#fff" : "#000",
+                  width: "40px",
+                  height: "40px",
+                  minWidth: 0,
+                  padding: 0,
+                }}
+              >
+                &nbsp;
+              </Button>
+            </Tooltip>
+          ))}
+        </Group>
+
+        <Paper
+          ref={contentEditableRef}
+          contentEditable
+          dangerouslySetInnerHTML={{ __html: content }}
+          onInput={(e) => setContent(e.currentTarget.innerHTML)}
+          p="md"
+          mb="md"
+          style={paperStyle}
+        />
+
         <Button
-          onClick={() => applyStyle(4)}
-          style={{ textDecoration: "underline" }}
+          onClick={handleCopy}
+          style={{
+            ...buttonBaseStyle,
+            width: "100%",
+            backgroundColor:
+              copyCount > 8 ? "#F04747" : copyCount > 2 ? "#43B581" : "#7289DA",
+            color: "#FFFFFF",
+            padding: "0.75rem",
+            fontSize: "1rem",
+            ":hover": {
+              opacity: 0.9,
+            },
+          }}
         >
-          Line
+          {copyCount < funnyCopyMessages.length
+            ? funnyCopyMessages[copyCount]
+            : "Copied!"}
         </Button>
-      </Group>
-
-      <Text fw={500}>FG</Text>
-      <Group mb="md">
-        {[30, 31, 32, 33, 34, 35, 36, 37].map((code) => (
-          <Tooltip label={ANSI_COLORS[code].name} key={`fg-${code}`}>
-            <Button
-              onClick={() => applyStyle(code)}
-              style={{ backgroundColor: ANSI_COLORS[code].color }}
-              px="sm"
-            >
-              &nbsp;
-            </Button>
-          </Tooltip>
-        ))}
-      </Group>
-
-      <Text fw={500}>BG</Text>
-      <Group mb="md">
-        {[40, 41, 42, 43, 44, 45, 46, 47].map((code) => (
-          <Tooltip label={ANSI_COLORS[code].name} key={`bg-${code}`}>
-            <Button
-              onClick={() => applyStyle(code)}
-              style={{
-                backgroundColor: ANSI_COLORS[code].bg,
-                color: code >= 45 ? "#fff" : "#000",
-              }}
-              px="sm"
-            >
-              &nbsp;
-            </Button>
-          </Tooltip>
-        ))}
-      </Group>
-
-      <Paper
-        ref={contentEditableRef}
-        contentEditable
-        dangerouslySetInnerHTML={{ __html: content }}
-        onInput={(e) => setContent(e.currentTarget.innerHTML)}
-        p="md"
-        mb="md"
-        style={{
-          minHeight: 200,
-          textAlign: "left",
-          fontFamily: "monospace",
-          backgroundColor: "#2F3136",
-          color: "#B9BBBE",
-          border: "1px solid #202225",
-          borderRadius: "5px",
-          whiteSpace: "pre-wrap",
-        }}
-      />
-
-      <Button
-        onClick={handleCopy}
-        color={copyCount > 8 ? "red" : copyCount > 2 ? "teal" : "blue"}
-        mb="md"
-      >
-        {copyCount < funnyCopyMessages.length
-          ? funnyCopyMessages[copyCount]
-          : "Copied!"}
-      </Button>
-    </Container>
+      </div>
+    </div>
   );
 }
