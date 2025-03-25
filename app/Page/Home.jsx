@@ -35,7 +35,7 @@ const ANSI_COLORS = {
 
 export default function ColoredTextGenerator() {
   const [content, setContent] = useState(
-    `Welcome to Rebane's Discord Colored Text Generator!`
+    `Hi I'm Mukilan T , I'm really excited to do work for VideoDubber.ai!`
   );
   const [selection, setSelection] = useState(null);
   const contentEditableRef = useRef(null);
@@ -95,7 +95,8 @@ export default function ColoredTextGenerator() {
   }, []);
 
   const funnyCopyMessages = [
-    "Copied!",
+    "Click to copy!",
+    "Copied",
     "Double Copy!",
     "Triple Copy!",
     "Dominating!!",
@@ -143,14 +144,7 @@ export default function ColoredTextGenerator() {
     cursor: "pointer",
   };
 
-  const resetButtonStyle = {
-    ...buttonBaseStyle,
-    backgroundColor: "#4F545C",
-    color: "#FFFFFF",
-    ":hover": {
-      backgroundColor: "#5D6269",
-    },
-  };
+
 
   const boldButtonStyle = {
     ...buttonBaseStyle,
@@ -194,9 +188,7 @@ export default function ColoredTextGenerator() {
         </Title>
 
         <Group mb="md">
-          <Button onClick={() => applyStyle(0)} style={resetButtonStyle}>
-            Reset All
-          </Button>
+        
           <Button onClick={() => applyStyle(1)} style={boldButtonStyle}>
             Bold
           </Button>

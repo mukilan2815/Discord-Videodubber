@@ -1,3 +1,7 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+}
 
 .mantine-Button:active {
   animation: pulse 0.2s ease;
